@@ -1,0 +1,55 @@
+// employeeActions.js
+import axios from 'axios';
+
+export const FETCH_EMPLOYEES = 'FETCH_EMPLOYEES';
+export const CREATE_EMPLOYEE = 'CREATE_EMPLOYEE';
+export const UPDATE_EMPLOYEE = 'UPDATE_EMPLOYEE';
+export const DELETE_EMPLOYEE = 'DELETE_EMPLOYEE';
+
+const apiUrl = 'https://localhost:5185/api/Employees'; 
+
+export const fetchEmployees = () => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(apiUrl);
+      dispatch({ type: FETCH_EMPLOYEES, payload: response.data });
+    } catch (error) {
+      console.error('Error fetching employees:', error);
+    }
+  };
+};
+
+export const createEmployee = (employeeData) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(apiUrl, employeeData);
+      dispatch({ type: CREATE_EMPLOYEE, payload: response.data });
+    } catch (error) {
+      console.error('Error creating employee:', error);
+    }
+  };
+};
+
+export const updateEmployee = (employeeId, employeeData) => {
+  const updateUrl = `${apiUrl}/${employeeId}`;
+  return async (dispatch) => {
+    try {
+      const response = await axios.put(updateUrl, employeeData);
+      dispatch({ type: UPDATE_EMPLOYEE, payload: response.data });
+    } catch (error) {
+      console.error('Error updating employee:', error);
+    }
+  };
+};
+
+export const deleteEmployee = (employeeId) => {
+  const deleteUrl = `${apiUrl}/${employeeId}`;
+  return async (dispatch) => {
+    try {
+      await axios.delete(deleteUrl);
+      dispatch({ type: DELETE_EMPLOYEE, payload: employeeId });
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+    }
+  };
+};
